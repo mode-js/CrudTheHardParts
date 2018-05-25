@@ -4,6 +4,7 @@ const edit = document.querySelector('#edit');
 const form = document.querySelector('#todo_add');
 const inputBox = document.querySelector('#todo');
 const base = 'http://localhost:3000/todo';
+
 // Getting Todos
 const getTodos = () => {
   fetch(base)
@@ -13,6 +14,7 @@ const getTodos = () => {
     })
     .catch(err => console.log('You broke it 💩', err));
 };
+
 // Deleting Todos
 function deleteTodo(id) {
   fetch(`${base}/${id}`, {
@@ -21,21 +23,25 @@ function deleteTodo(id) {
     .then(res => res.json())
     .then(() => getTodos());
 }
+
 function triggerDelete(e) {
   const item = e.target;
   if (!item.matches('.delete')) return;
   deleteTodo(e.target.dataset.id);
 }
+
 // Adds Edit Form at bottom opf Page
 function addInput(id) {
   edit.innerHTML = `<input class='editItem' type='text'/><button class='save' data-id=${id} >Save Update</button>`;
 }
+
 //  Button Click of Edit Button
 function triggerEdit(e) {
   const item = e.target;
   if (!item.matches('.edit')) return;
   addInput(item.dataset.id);
 }
+
 // Updating a todo
 function updateTodo(id, todo) {
   fetch(`${base}/${id}`, {
@@ -53,11 +59,13 @@ function updateTodo(id, todo) {
 
     .catch(err => console.log(err));
 }
+
 function saveEdit(e) {
   const item = e.target;
   if (!item.matches('.save')) return;
   updateTodo(item.dataset.id, item.previousElementSibling.value);
 }
+
 // adding item
 const addTodo = (todo) => {
   fetch(base, {
@@ -71,19 +79,23 @@ const addTodo = (todo) => {
     .then(() => getTodos())
     .catch(err => console.log(err));
 };
+
 // Listener for a save click
 edit.addEventListener('click', (e) => {
   saveEdit(e);
 });
+
 noteList.addEventListener('click', (e) => {
   triggerDelete(e);
   triggerEdit(e);
 });
+
 form.addEventListener('submit', (e) => {
   e.preventDefault();
   addTodo(inputBox.value);
   form.reset();
 });
+
 document.addEventListener('DOMContentLoaded', () => {
   getTodos();
 });
